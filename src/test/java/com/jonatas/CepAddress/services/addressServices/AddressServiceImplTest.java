@@ -40,21 +40,19 @@ public class AddressServiceImplTest {
     void shouldReturnAddressDtoWhenAddressExists() {
         UUID addressId = UUID.fromString("8f9b18ef-ef2c-4185-8792-e355d0534956");
 
-        // Criando o endereço a ser retornado
         Address address = new Address();
         address.setId(addressId);
         address.setCep("08215510");
         address.setNumero("32");
         address.setComplemento("4");
+        address.setLogradouro("Rua Exemplo");
+        address.setCidade("São Paulo");
 
-        when(addressRepository.findById(addressId)).thenReturn(java.util.Optional.of(address));
+        when(addressRepository.findById(addressId)).thenReturn(Optional.of(address));
 
-        AddressDto addressDtoOpt = addressService.getAddressById(addressId);
+        AddressDto addressDto = addressService.getAddressById(addressId);
 
-        assertTrue(addressDtoOpt.isPresent());
-
-        Address addressDto = addressDtoOpt.get();
-
+        assertNotNull(addressDto);
         assertEquals(address.getId(), addressDto.getId());
         assertEquals(address.getCep(), addressDto.getCep());
         assertEquals(address.getNumero(), addressDto.getNumero());
@@ -62,6 +60,7 @@ public class AddressServiceImplTest {
         assertEquals(address.getLogradouro(), addressDto.getLogradouro());
         assertEquals(address.getCidade(), addressDto.getCidade());
     }
+
 
     @Test
     void shouldThrowNotFoundExceptionWhenAddressDoesNotExist() {
