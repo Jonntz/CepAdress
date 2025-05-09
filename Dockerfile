@@ -1,9 +1,16 @@
-FROM maven:3.9.9-amazoncorretto-21 as build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -X -DskipTests
+FROM ubuntu:lastest AS build
 
-FROM openjdk:21-ea-1-jdk-slim
-WORKDIR /app
-COPY --from=build ./app/target/*.jar ./cepAddress.jar
-ENTRYPOINT java -jar cepAddress.jar
+RUN apt-get update
+RUN apt-get install openjdk-21-jdk -y
+COPY . .
+
+RUN apt-get install maven -y
+RUN mvn clean install
+
+FROM openjdk:21-slim
+
+EXPOSE 8080
+
+COPY --from=build /target/*.jar cepAddress.jar
+
+ENTRYPOINT ["java", "-jar", "cepAddress.jar"]

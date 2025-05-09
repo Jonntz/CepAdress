@@ -33,7 +33,7 @@ public class AddressServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
+    @InjectMocks
     private ViaCepService viaCepService;
 
     @Test
